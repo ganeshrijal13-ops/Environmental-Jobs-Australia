@@ -1,0 +1,305 @@
+import React, { useMemo, useState } from "react";
+import { motion } from "framer-motion";
+import { Search, MapPin, BriefcaseBusiness, Building2, CalendarDays, ExternalLink, Mail, ShieldCheck, Leaf, Filter, PlusCircle } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+
+const sampleJobs = [
+  {
+    id: 1,
+    title: "Graduate Environmental Consultant",
+    company: "EcoLand Consulting",
+    location: "Sydney, NSW",
+    state: "NSW",
+    category: "Environmental Consulting",
+    type: "Full-time",
+    salary: "$70,000 - $82,000",
+    source: "Employer Career Page",
+    posted: "Today",
+    closing: "14 Jun 2026",
+    description: "Entry-level consulting role supporting contaminated land, field sampling, site assessments and environmental reporting.",
+    applyUrl: "#"
+  },
+  {
+    id: 2,
+    title: "Ecologist / Biodiversity Officer",
+    company: "Regional Council",
+    location: "Gold Coast, QLD",
+    state: "QLD",
+    category: "Ecology",
+    type: "Full-time",
+    salary: "$88,000 - $101,000",
+    source: "Government Jobs Feed",
+    posted: "1 day ago",
+    closing: "20 Jun 2026",
+    description: "Conduct flora and fauna assessments, biodiversity planning, vegetation mapping and development application reviews.",
+    applyUrl: "#"
+  },
+  {
+    id: 3,
+    title: "Sustainability Advisor",
+    company: "GreenBuild Australia",
+    location: "Melbourne, VIC",
+    state: "VIC",
+    category: "Sustainability",
+    type: "Hybrid",
+    salary: "$95,000 - $115,000",
+    source: "Adzuna API Placeholder",
+    posted: "2 days ago",
+    closing: "30 Jun 2026",
+    description: "Support ESG reporting, emissions reduction projects, stakeholder engagement and sustainability strategy implementation.",
+    applyUrl: "#"
+  },
+  {
+    id: 4,
+    title: "GIS Environmental Analyst",
+    company: "Land & Water Solutions",
+    location: "Hobart, TAS",
+    state: "TAS",
+    category: "GIS & Spatial",
+    type: "Full-time",
+    salary: "$78,000 - $92,000",
+    source: "Direct Employer Post",
+    posted: "3 days ago",
+    closing: "25 Jun 2026",
+    description: "Use ArcGIS/QGIS to prepare environmental constraints maps, catchment analysis, habitat mapping and spatial reporting.",
+    applyUrl: "#"
+  },
+  {
+    id: 5,
+    title: "Contaminated Land Scientist",
+    company: "EnviroRisk Group",
+    location: "Brisbane, QLD",
+    state: "QLD",
+    category: "Contaminated Land",
+    type: "Full-time",
+    salary: "$85,000 - $105,000",
+    source: "Job Board Partner Feed",
+    posted: "5 days ago",
+    closing: "18 Jun 2026",
+    description: "Plan and undertake soil, groundwater and vapour investigations, prepare reports and support remediation projects.",
+    applyUrl: "#"
+  },
+  {
+    id: 6,
+    title: "Natural Resource Management Officer",
+    company: "Catchment Alliance",
+    location: "Launceston, TAS",
+    state: "TAS",
+    category: "NRM & Conservation",
+    type: "Contract",
+    salary: "$76,000 - $89,000",
+    source: "RSS Feed Placeholder",
+    posted: "1 week ago",
+    closing: "28 Jun 2026",
+    description: "Coordinate landcare projects, community workshops, weed control, revegetation and catchment restoration programs.",
+    applyUrl: "#"
+  }
+];
+
+const categories = ["All", "Environmental Consulting", "Ecology", "Sustainability", "GIS & Spatial", "Contaminated Land", "NRM & Conservation"];
+const states = ["All", "NSW", "QLD", "VIC", "TAS", "SA", "WA", "ACT", "NT"];
+
+export default function EnvironmentalJobsAustralia() {
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("All");
+  const [state, setState] = useState("All");
+  const [showPostForm, setShowPostForm] = useState(false);
+
+  const filteredJobs = useMemo(() => {
+    return sampleJobs.filter((job) => {
+      const text = `${job.title} ${job.company} ${job.location} ${job.category} ${job.description}`.toLowerCase();
+      const matchesSearch = text.includes(search.toLowerCase());
+      const matchesCategory = category === "All" || job.category === category;
+      const matchesState = state === "All" || job.state === state;
+      return matchesSearch && matchesCategory && matchesState;
+    });
+  }, [search, category, state]);
+
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-900">
+      <header className="sticky top-0 z-20 border-b bg-white/90 backdrop-blur">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-100">
+              <Leaf className="h-6 w-6 text-emerald-700" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold tracking-tight">Environmental Jobs Australia</h1>
+              <p className="text-xs text-slate-500">Australia-wide environmental career hub</p>
+            </div>
+          </div>
+          <nav className="hidden items-center gap-6 text-sm font-medium text-slate-600 md:flex">
+            <a href="#jobs" className="hover:text-emerald-700">Jobs</a>
+            <a href="#alerts" className="hover:text-emerald-700">Job Alerts</a>
+            <a href="#employers" className="hover:text-emerald-700">For Employers</a>
+            <a href="#sources" className="hover:text-emerald-700">Sources</a>
+          </nav>
+          <Button onClick={() => setShowPostForm(!showPostForm)} className="rounded-2xl">
+            <PlusCircle className="mr-2 h-4 w-4" /> Post a Job
+          </Button>
+        </div>
+      </header>
+
+      <main>
+        <section className="relative overflow-hidden bg-gradient-to-br from-emerald-900 via-teal-800 to-slate-900 text-white">
+          <div className="absolute inset-0 opacity-20" style={{ backgroundImage: "radial-gradient(circle at 20% 20%, white 0, transparent 25%), radial-gradient(circle at 80% 10%, #a7f3d0 0, transparent 25%)" }} />
+          <div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-20 sm:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:px-8">
+            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+              <p className="mb-4 inline-flex rounded-full bg-white/10 px-4 py-2 text-sm font-medium ring-1 ring-white/20">Environmental, ecology, sustainability, GIS, water and government jobs</p>
+              <h2 className="max-w-3xl text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">Find environmental jobs across Australia in one place.</h2>
+              <p className="mt-6 max-w-2xl text-lg text-emerald-50">A niche job platform designed to collect Australian environmental opportunities from approved job APIs, government feeds, employer career pages and direct company posts.</p>
+              <div className="mt-8 grid max-w-3xl gap-3 rounded-3xl bg-white p-3 shadow-2xl md:grid-cols-[1fr_160px_160px_auto]">
+                <div className="flex items-center gap-2 rounded-2xl border px-3 py-2 text-slate-900">
+                  <Search className="h-5 w-5 text-slate-400" />
+                  <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search role, skill or company" className="w-full bg-transparent outline-none" />
+                </div>
+                <select value={category} onChange={(e) => setCategory(e.target.value)} className="rounded-2xl border px-3 py-2 text-slate-900 outline-none">
+                  {categories.map((item) => <option key={item}>{item}</option>)}
+                </select>
+                <select value={state} onChange={(e) => setState(e.target.value)} className="rounded-2xl border px-3 py-2 text-slate-900 outline-none">
+                  {states.map((item) => <option key={item}>{item}</option>)}
+                </select>
+                <Button className="rounded-2xl px-6">Search</Button>
+              </div>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.1 }}>
+              <Card className="rounded-3xl border-white/20 bg-white/10 text-white shadow-2xl backdrop-blur">
+                <CardContent className="p-6">
+                  <h3 className="text-lg font-bold">Platform snapshot</h3>
+                  <div className="mt-5 grid grid-cols-2 gap-4">
+                    <Stat number="6" label="Demo jobs listed" />
+                    <Stat number="8" label="States & territories" />
+                    <Stat number="4" label="Source types" />
+                    <Stat number="Daily" label="Auto updates planned" />
+                  </div>
+                  <div className="mt-6 rounded-2xl bg-white/10 p-4 text-sm text-emerald-50">
+                    Next step: connect this interface to real APIs such as Adzuna, approved government feeds, employer submissions and partner job-board feeds.
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
+        </section>
+
+        {showPostForm && (
+          <section id="employers" className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+            <Card className="rounded-3xl shadow-sm">
+              <CardContent className="p-6">
+                <h3 className="text-2xl font-bold">Employer job submission</h3>
+                <p className="mt-2 text-slate-600">This form is a front-end prototype. In production, it would save to your database and require admin approval before publishing.</p>
+                <div className="mt-6 grid gap-4 md:grid-cols-2">
+                  <input className="rounded-2xl border px-4 py-3 outline-none" placeholder="Job title" />
+                  <input className="rounded-2xl border px-4 py-3 outline-none" placeholder="Company / organisation" />
+                  <input className="rounded-2xl border px-4 py-3 outline-none" placeholder="Location" />
+                  <input className="rounded-2xl border px-4 py-3 outline-none" placeholder="Salary range" />
+                  <input className="rounded-2xl border px-4 py-3 outline-none md:col-span-2" placeholder="Application link" />
+                  <textarea className="min-h-28 rounded-2xl border px-4 py-3 outline-none md:col-span-2" placeholder="Short job description" />
+                </div>
+                <Button className="mt-5 rounded-2xl">Submit for Review</Button>
+              </CardContent>
+            </Card>
+          </section>
+        )}
+
+        <section id="jobs" className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+          <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+            <div>
+              <p className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-emerald-700"><Filter className="h-4 w-4" /> Live job board preview</p>
+              <h2 className="mt-2 text-3xl font-bold">{filteredJobs.length} environmental jobs found</h2>
+            </div>
+            <p className="max-w-xl text-slate-600">Listings below are demo records. The production version should store sourced jobs in a database and update them on a schedule.</p>
+          </div>
+
+          <div className="grid gap-5">
+            {filteredJobs.map((job) => (
+              <motion.article key={job.id} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.35 }}>
+                <Card className="rounded-3xl border-slate-200 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+                  <CardContent className="p-6">
+                    <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-start">
+                      <div>
+                        <div className="mb-3 flex flex-wrap gap-2">
+                          <Badge>{job.category}</Badge>
+                          <Badge>{job.type}</Badge>
+                          <Badge>{job.source}</Badge>
+                        </div>
+                        <h3 className="text-2xl font-bold text-slate-950">{job.title}</h3>
+                        <div className="mt-3 flex flex-wrap gap-4 text-sm text-slate-600">
+                          <span className="flex items-center gap-1.5"><Building2 className="h-4 w-4" /> {job.company}</span>
+                          <span className="flex items-center gap-1.5"><MapPin className="h-4 w-4" /> {job.location}</span>
+                          <span className="flex items-center gap-1.5"><BriefcaseBusiness className="h-4 w-4" /> {job.salary}</span>
+                          <span className="flex items-center gap-1.5"><CalendarDays className="h-4 w-4" /> Closes {job.closing}</span>
+                        </div>
+                        <p className="mt-4 max-w-4xl text-slate-700">{job.description}</p>
+                      </div>
+                      <div className="flex shrink-0 flex-col gap-3 lg:items-end">
+                        <span className="text-sm font-medium text-slate-500">Posted {job.posted}</span>
+                        <Button className="rounded-2xl">
+                          Apply <ExternalLink className="ml-2 h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.article>
+            ))}
+          </div>
+        </section>
+
+        <section id="alerts" className="bg-white py-16">
+          <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
+            <Card className="rounded-3xl bg-emerald-50 shadow-sm">
+              <CardContent className="p-8">
+                <Mail className="h-9 w-9 text-emerald-700" />
+                <h2 className="mt-4 text-3xl font-bold">Create job alerts</h2>
+                <p className="mt-3 text-slate-600">Users can receive weekly or daily alerts for graduate roles, ecology jobs, sustainability roles, government jobs, sponsorship-friendly roles and regional opportunities.</p>
+                <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                  <input className="flex-1 rounded-2xl border px-4 py-3 outline-none" placeholder="Email address" />
+                  <Button className="rounded-2xl">Notify Me</Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card id="sources" className="rounded-3xl shadow-sm">
+              <CardContent className="p-8">
+                <ShieldCheck className="h-9 w-9 text-emerald-700" />
+                <h2 className="mt-4 text-3xl font-bold">Approved sourcing model</h2>
+                <ul className="mt-5 space-y-3 text-slate-700">
+                  <li>• Job APIs such as Adzuna or approved partners.</li>
+                  <li>• Government and council job feeds where permitted.</li>
+                  <li>• Direct employer submissions with admin approval.</li>
+                  <li>• Employer career pages only where crawling is permitted.</li>
+                  <li>• Original source attribution and apply links.</li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+      </main>
+
+      <footer className="bg-slate-950 px-4 py-10 text-white sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 md:flex-row md:items-center">
+          <div>
+            <h3 className="text-lg font-bold">Environmental Jobs Australia</h3>
+            <p className="mt-1 text-sm text-slate-400">Prototype website for an Australian environmental job aggregator.</p>
+          </div>
+          <p className="text-sm text-slate-400">Privacy • Terms • Contact • Employer Login</p>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+function Badge({ children }) {
+  return <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">{children}</span>;
+}
+
+function Stat({ number, label }) {
+  return (
+    <div className="rounded-2xl bg-white/10 p-4 ring-1 ring-white/10">
+      <p className="text-2xl font-extrabold">{number}</p>
+      <p className="mt-1 text-sm text-emerald-50">{label}</p>
+    </div>
+  );
+}
